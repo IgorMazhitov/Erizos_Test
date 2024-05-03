@@ -82,12 +82,15 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
 
   handleSearch = (searchName: string) => {
     const paths: string[] = [];
+    // If search is empty, reset search results and expanded folders
     if (searchName === "") {
       this.setState({ searchName });
       this.setState({ expandedFolders: new Set() });
       return;
     }
     this.setState({ searchName });
+
+    // DFS to find all paths that contain the search name
     const dfs = (folder: FolderProps, tempPath: string = "") => {
       for (const child of folder.children) {
         if ("children" in child) {
@@ -101,9 +104,13 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
         }
       }
     };
+
+    // DFS for each folder in the data
     for (const folder of this.props.data) {
       dfs(folder, folder.name);
     }
+
+    // Expand all folders that contain the search name
     const newSet = new Set<string>();
     if (paths.length === 0) {
       this.setState({ expandedFolders: newSet });
