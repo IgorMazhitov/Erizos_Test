@@ -14,6 +14,7 @@ interface FolderProps {
 
 interface MyBrowserProps {
   data: FolderProps[];
+  defaultExpandedFolders: Set<string>;
 }
 
 interface MyBrowserState {
@@ -26,7 +27,7 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
   constructor(props: MyBrowserProps) {
     super(props);
     this.state = {
-      expandedFolders: new Set<string>(),
+      expandedFolders: this.props.defaultExpandedFolders,
       searchName: "",
       searchResults: [],
     };
@@ -105,8 +106,8 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
     }
     const newSet = new Set<string>();
     if (paths.length === 0) {
-        this.setState({ expandedFolders: newSet });
-        return;
+      this.setState({ expandedFolders: newSet });
+      return;
     }
     for (const path of paths) {
       const folders = path.split("/");

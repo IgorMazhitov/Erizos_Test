@@ -66,7 +66,7 @@ class ParseStringFunction extends React.Component {
               {" "}
               Implemented Parse String Function (Edit in code){" "}
             </label>
-            <text>{implementedParseString("-123") + 2} </text>
+            <div>{implementedParseString("-123") + 2} </div>
           </div>
         </div>
         <div
