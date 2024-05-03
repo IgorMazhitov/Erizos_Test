@@ -18,6 +18,8 @@ interface MyBrowserProps {
 
 interface MyBrowserState {
   expandedFolders: Set<string>;
+  searchName: string;
+  searchResults: (FolderProps | FileProps)[];
 }
 
 class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
@@ -25,6 +27,8 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
     super(props);
     this.state = {
       expandedFolders: new Set<string>(),
+      searchName: "",
+      searchResults: [],
     };
   }
 
@@ -38,8 +42,8 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
     this.setState({ expandedFolders: new Set(expandedFolders) });
   }
 
-  renderFolder(folder: FolderProps, path: string) {
-    const { expandedFolders } = this.state;
+  renderFolder = (folder: FolderProps, path: string) => {
+    const { expandedFolders, searchResults } = this.state;
     const fullPath = `${path}/${folder.name}`;
 
     return (
@@ -50,7 +54,7 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
             cursor: "pointer",
             fontWeight: "bold",
             textDecoration: "underline",
-            color: expandedFolders.has(fullPath) ? "blue" : "black",
+            color: expandedFolders.has(fullPath) ? "blue" : "black", // Change color based on folder state
           }}
         >
           {folder.name}
@@ -73,35 +77,73 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
         )}
       </div>
     );
-  }
+  };
+
+  handleSearch = (searchName: string) => {
+    const paths: string[] = [];
+    if (searchName === "") {
+      this.setState({ searchName });
+      this.setState({ expandedFolders: new Set() });
+      return;
+    }
+    this.setState({ searchName });
+    const dfs = (folder: FolderProps, tempPath: string = "") => {
+      for (const child of folder.children) {
+        if ("children" in child) {
+          const fullPath = `${tempPath}/${child.name}`;
+          dfs(child, fullPath);
+        } else {
+          if (child.name.trim().includes(searchName.trim())) {
+            const fullPath = `${tempPath}/${child.name}`;
+            paths.push(fullPath);
+          }
+        }
+      }
+    };
+    for (const folder of this.props.data) {
+      dfs(folder, folder.name);
+    }
+    const newSet = new Set<string>();
+    if (paths.length === 0) {
+        this.setState({ expandedFolders: newSet });
+        return;
+    }
+    for (const path of paths) {
+      const folders = path.split("/");
+      for (let i = 0; i < folders.length; i++) {
+        const folderPath = "/" + folders.slice(0, i + 1).join("/");
+        newSet.add(folderPath);
+        this.setState({ expandedFolders: new Set(newSet) });
+      }
+    }
+  };
 
   render() {
     const { data } = this.props;
+    const { searchName } = this.state;
 
     return (
-      <>
-        <label style={{ fontWeight: "bold", padding: "10px" }}>File Browser (Click to expand/collapse)</label>
-        <div
-          style={{
-            backgroundColor: "#f5f5f5",
-            padding: "10px",
-            marginTop: "30px",
-          }}
-        >
-          {data.map((folder, index) => (
-            <div
-              key={index}
-              style={{
-                marginBottom: "20px",
-                border: "1px solid #ccc",
-                padding: "10px",
-              }}
-            >
-              {this.renderFolder(folder, "")}
-            </div>
-          ))}
-        </div>
-      </>
+      <div style={{ backgroundColor: "#f5f5f5", padding: "10px" }}>
+        {data.map((folder, index) => (
+          <div
+            key={index}
+            style={{
+              marginBottom: "20px",
+              border: "1px solid #ccc",
+              padding: "10px",
+            }}
+          >
+            {this.renderFolder(folder, "")}
+          </div>
+        ))}
+        // INPUT FOR SEARCH
+        <input
+          type="text"
+          value={searchName}
+          onChange={(e) => this.handleSearch(e.target.value)}
+          placeholder="Search"
+        />
+      </div>
     );
   }
 }

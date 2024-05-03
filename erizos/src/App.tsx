@@ -1,7 +1,7 @@
 import React from 'react';
 import MyBrowser from './file-browser/fileBrowser';
 import fakeData from './fakeData/fakeFileSystem';
-import ParseStringFunction from './components/parseStringFunction';
+import ParseStringFunction from './components/parseString';
 import SpiralMatrix from './components/spiralMatrix';
 
 class App extends React.Component {
