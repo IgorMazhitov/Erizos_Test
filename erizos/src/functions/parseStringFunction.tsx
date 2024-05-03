@@ -90,7 +90,7 @@ class ParseStringFunction extends React.Component {
             alignItems: "center",
           }}
         >
-          <header>Parse String Function</header>
+          <header>Parse String Function (Enterable strings (will throw an error if number in string is invalid))</header>
           <div
             style={{
               display: "flex",
@@ -114,12 +114,14 @@ class ParseStringFunction extends React.Component {
           <div>
             <label style={{ fontWeight: "bold" }}>
               {" "}
-              Implemented Parse String Function{" "}
+              Implemented Parse String Function (Edit in code){" "}
             </label>
             <text>{this.implementedParseString("-123") + 2} </text>
           </div>
         </div>
-        <div style={{ width: "100vw", height: "2px", backgroundColor: "black"}} />
+        <div
+          style={{ width: "100vw", height: "2px", backgroundColor: "black" }}
+        />
       </>
     );
   }

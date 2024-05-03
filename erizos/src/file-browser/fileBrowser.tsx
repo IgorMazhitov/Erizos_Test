@@ -80,7 +80,7 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
 
     return (
       <>
-        <label style={{ fontWeight: "bold", padding: "10px" }}>File Browser</label>
+        <label style={{ fontWeight: "bold", padding: "10px" }}>File Browser (Click to expand/collapse)</label>
         <div
           style={{
             backgroundColor: "#f5f5f5",
