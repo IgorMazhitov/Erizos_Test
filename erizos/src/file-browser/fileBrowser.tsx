@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./fileBrowser.css";
 
 interface FileProps {
   mime: string;
@@ -36,6 +37,11 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
   toggleFolder(name: string) {
     const { expandedFolders } = this.state;
     if (expandedFolders.has(name)) {
+      expandedFolders.forEach((expandedFolder) => {
+        if (expandedFolder.match(name)) {
+          expandedFolders.delete(expandedFolder);
+        }
+      });
       expandedFolders.delete(name);
     } else {
       expandedFolders.add(name);
@@ -44,32 +50,28 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
   }
 
   renderFolder = (folder: FolderProps, path: string) => {
-    const { expandedFolders, searchResults } = this.state;
+    const { expandedFolders } = this.state;
     const fullPath = `${path}/${folder.name}`;
 
     return (
-      <div key={fullPath} style={{ marginBottom: "10px" }}>
+      <div key={fullPath} className="folder">
         <div
           onClick={() => this.toggleFolder(fullPath)}
-          style={{
-            cursor: "pointer",
-            fontWeight: "bold",
-            textDecoration: "underline",
-            color: expandedFolders.has(fullPath) ? "blue" : "black", // Change color based on folder state
-          }}
+          className={
+            expandedFolders.has(fullPath)
+              ? "folder-name expanded"
+              : "folder-name"
+          }
         >
           {folder.name}
         </div>
         {expandedFolders.has(fullPath) && (
-          <div style={{ paddingLeft: "20px" }}>
+          <div className="folder-children">
             {folder.children.map((child, index) =>
               "children" in child ? (
                 this.renderFolder(child, fullPath)
               ) : (
-                <div
-                  key={index}
-                  style={{ marginTop: "5px", fontStyle: "italic" }}
-                >
+                <div key={index} className="file">
                   {child.name}
                 </div>
               )
@@ -131,25 +133,22 @@ class MyBrowser extends Component<MyBrowserProps, MyBrowserState> {
     const { searchName } = this.state;
 
     return (
-      <div style={{ backgroundColor: "#f5f5f5", padding: "10px" }}>
-        {data.map((folder, index) => (
-          <div
-            key={index}
-            style={{
-              marginBottom: "20px",
-              border: "1px solid #ccc",
-              padding: "10px",
-            }}
-          >
-            {this.renderFolder(folder, "")}
-          </div>
-        ))}
-        // INPUT FOR SEARCH
+      <div className="my-browser">
+        {data
+          .filter((folder) =>
+            folder.name.toLowerCase().includes(searchName.toLowerCase())
+          )
+          .map((folder, index) => (
+            <div key={index} className="folder-container">
+              {this.renderFolder(folder, "")}
+            </div>
+          ))}
         <input
           type="text"
           value={searchName}
           onChange={(e) => this.handleSearch(e.target.value)}
           placeholder="Search"
+          className="search-input"
         />
       </div>
     );

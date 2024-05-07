@@ -1,0 +1,38 @@
+.my-browser {
+    background-color: #f5f5f5;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .folder {
+    margin-bottom: 10px;
+  }
+  
+  .folder-name {
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  .folder-name.expanded {
+    color: blue;
+  }
+  
+  .folder-children {
+    padding-left: 20px;
+  }
+  
+  .file {
+    margin-top: 5px;
+    font-style: italic;
+  }
+  
+  .search-input {
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  

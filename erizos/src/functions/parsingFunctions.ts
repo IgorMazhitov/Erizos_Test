@@ -2,50 +2,58 @@ export const implementedParseString = (input: string): number => {
   const isNegative = input[0] === "-";
   let result = 0;
   let i = isNegative ? 1 : 0;
+  let hasDecimal = false;
+  let decimalPlace = 1;
+  let exponent = 0;
+  let isExponential = false;
+
   while (i < input.length) {
     const char = input[i];
-    let digit = 0;
+    let digit = NaN;
+
     switch (char) {
       case "0":
-        digit = 0;
-        break;
       case "1":
-        digit = 1;
-        break;
       case "2":
-        digit = 2;
-        break;
       case "3":
-        digit = 3;
-        break;
       case "4":
-        digit = 4;
-        break;
       case "5":
-        digit = 5;
-        break;
       case "6":
-        digit = 6;
-        break;
       case "7":
-        digit = 7;
-        break;
       case "8":
-        digit = 8;
-        break;
       case "9":
-        digit = 9;
+        digit = parseInt(char);
+        if (isExponential) {
+          exponent = exponent * 10 + digit;
+        } else if (hasDecimal) {
+          result += digit / Math.pow(10, decimalPlace);
+          decimalPlace++;
+        } else {
+          result = result * 10 + digit;
+        }
         break;
-      default: {
-        digit = NaN;
+      case ".":
+        if (hasDecimal || isExponential) {
+          throw new Error("Invalid input");
+        }
+        hasDecimal = true;
         break;
-      }
+      case "e":
+        if (isExponential) {
+          throw new Error("Invalid input");
+        }
+        isExponential = true;
+        break;
+      default:
+        throw new Error("Invalid input");
     }
-    if (isNaN(digit)) {
-      throw new Error("Invalid input");
-    }
-    result = result * 10 + digit;
+
     i++;
   }
+
+  if (isExponential) {
+    result *= Math.pow(10, exponent);
+  }
+
   return isNegative ? -result : result;
 };

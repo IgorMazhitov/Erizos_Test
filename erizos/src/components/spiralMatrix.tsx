@@ -32,46 +32,52 @@ class SpiralMatrix extends Component<{}, State> {
     const { matrix, spiralOrder } = this.state;
 
     return (
-      <>
-        <div
-          style={{
-            display: "flex",
+      <div
+        style={{
+          display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            fontFamily: "Arial, sans-serif",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            maxWidth: "400px",
+            margin: "0 auto",
             marginTop: "20px",
-          }}
-        >
-          {matrix.map((row, rowIndex) => (
-            <div key={rowIndex} style={{ display: "flex" }}>
-              {row.map((cell, cellIndex) => (
-                <span
-                  key={cellIndex}
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    border: "1px solid black",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "2px",
-                  }}
-                >
-                  {cell}
-                </span>
-              ))}
-            </div>
-          ))}
-          <label style={{ marginTop: "20px", fontWeight: "bold" }}>
-            Spiral Matrix - edit in code
-          </label>
-          <div style={{ marginTop: "20px", fontWeight: "bold" }}>
-            Spiral Order: {spiralOrder.join(" ")}
+        }}
+      >
+        {matrix.map((row, rowIndex) => (
+          <div key={rowIndex} style={{ display: "flex" }}>
+            {row.map((cell, cellIndex) => (
+              <span
+                key={cellIndex}
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  border: "1px solid black",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  margin: "2px",
+                }}
+              >
+                {cell}
+              </span>
+            ))}
           </div>
-        </div>
+        ))}
+        <label
+          style={{ marginTop: "20px", fontWeight: "bold", fontSize: "1.2em" }}
+        >
+          Spiral Matrix - edit in code
+        </label>
         <div
-          style={{ width: "100vw", height: "2px", backgroundColor: "black" }}
-        />
-      </>
+          style={{ marginTop: "20px", fontWeight: "bold", fontSize: "1.2em" }}
+        >
+          Spiral Order: {spiralOrder.join(" ")}
+        </div>
+      </div>
     );
   }
 }
